@@ -27,14 +27,15 @@ public class TermEvaluator {
         if (operatorStack.isEmpty() || operator == Operators.openBracket)
             operatorStack.push(operator);
         else if (operator == Operators.closedBracket) {
-            evaluate(operator);
+            evaluateBracket(operator);
             // pop openBracket
             operatorStack.pop();
-        } else {
-            if (previousOperatorOpenBracket() || operator.ordinal() <= operatorStack.peek().ordinal())
+        } else {                               // current operator has bigger priority than the op on top of the stack
+            if (previousOperatorOpenBracket() || operator.ordinal() < operatorStack.peek().ordinal())
                 operatorStack.push(operator);
             else {
-                evaluate(operator);
+                Operators topOnStack = operatorStack.pop();
+                evaluate(topOnStack);
                 operatorStack.push(operator);
             }
         }
@@ -51,11 +52,15 @@ public class TermEvaluator {
             Operators topOnStack = operatorStack.pop();
             if (topOnStack == Operators.openBracket)
                 throw new InvalidParameterException("Invalid expression error");
-            evaluate(topOnStack);
+            else if (topOnStack == Operators.closedBracket)
+                evaluateBracket(topOnStack);
+            else
+                evaluate(topOnStack);
         }
         if (operandStack.size() > 1)
             throw new InvalidParameterException("Invalid expression error");
         else {
+            // return result of the whole expression
             return operandStack.pop();
         }
     }
@@ -76,14 +81,21 @@ public class TermEvaluator {
      * @param currentOperator the operator to be evaluated.
      */
     public void evaluate(Operators currentOperator) {
-        if (operatorStack.size() > 1)
-            while (!previousOperatorOpenBracket() && currentOperator.ordinal() > operatorStack.peek().ordinal()) {
-                Operators matrixOperation = operatorStack.pop();
-                Matrix matrixResult = matrixOperation(matrixOperation);
-                operandStack.push(matrixResult);
-            }
-        else {
-            Matrix matrixResult = matrixOperation(currentOperator);
+        Matrix matrixResult = matrixOperation(currentOperator);
+        operandStack.push(matrixResult);
+    }
+
+    /**
+     * Evaluates the given operator and performs the corresponding matrix operation on the operands until openBracket.
+     * The result matrix is pushed onto the operand stack.
+     *
+     * @param currentOperator the operator to be evaluated.
+     */
+
+    public void evaluateBracket(Operators currentOperator) {
+        while (!previousOperatorOpenBracket() && currentOperator.ordinal() >= operatorStack.peek().ordinal()) {
+            Operators matrixOperation = operatorStack.pop();
+            Matrix matrixResult = matrixOperation(matrixOperation);
             operandStack.push(matrixResult);
         }
     }

@@ -9,9 +9,9 @@
 
 package cz.cuni.mff.java.matrixCalculator;
 
-        import java.security.InvalidParameterException;
-        import java.util.ArrayList;
-        import java.util.Objects;
+import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class CommandLineInput {
     /** A StringBuilder object for holding the current unary operation in the input */
@@ -86,11 +86,9 @@ public class CommandLineInput {
             } else if (value == ')') {
                 hasValidMatrixBrackets();
                 evaluator.addOperator(Operators.closedBracket);
-            } else if (value == '-') {
+            } else if (value == '-' && matrixOpened) {
                 // if matrix is opened, '-' must be a unary minus
-                if (matrixOpened) {
                     findMatrix(value);
-                }
             } else if (isBinaryOperator(value)) {
                 hasValidMatrixBrackets();
                 Operators operator = identifyBinaryOperator(value);

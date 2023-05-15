@@ -12,7 +12,7 @@ public enum Operators {
     inverse,
     rref,
     multiplication,
-    addition,
     subtraction,
+    addition,
     closedBracket
 }

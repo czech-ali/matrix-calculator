@@ -8,6 +8,7 @@
 package cz.cuni.mff.java.matrixCalculator;
 
 import java.security.InvalidParameterException;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -22,6 +23,8 @@ public class Main {
             try {
                 Scanner input = new Scanner(System.in);
                 String data = input.nextLine();
+                if (Objects.equals(data, "^Q") || Objects.equals(data, "^q"))
+                    return;
                 Matrix result = new CommandLineInput().evaluateTerm(data);
                 System.out.println(result);
             } catch (InvalidParameterException invalidParameter) {
