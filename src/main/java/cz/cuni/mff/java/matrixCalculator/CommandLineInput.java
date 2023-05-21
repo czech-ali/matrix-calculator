@@ -67,7 +67,7 @@ public class CommandLineInput {
      * If the character is none of the above, it looks for a matrix and adds it as an operand if found.
      * @param value the character to be parsed
      */
-    public void parseExpression(char value) {
+    private void parseExpression(char value) {
         if (isLetter(value)) {
             unary.append(value);
         }
@@ -182,7 +182,7 @@ public class CommandLineInput {
      * @return the matrix found, or null if no matrix was found yet
      * @throws InvalidParameterException if the parameter is not a valid character in the input string
      */
-    public Matrix findMatrix(char value) {
+    private Matrix findMatrix(char value) {
         if (whiteSpace) {
             whiteSpace = false;
             addFloatToMatrix();

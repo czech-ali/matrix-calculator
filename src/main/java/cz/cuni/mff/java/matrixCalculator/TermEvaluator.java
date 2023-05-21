@@ -27,7 +27,7 @@ public class TermEvaluator {
         if (operatorStack.isEmpty() || operator == Operators.openBracket)
             operatorStack.push(operator);
         else if (operator == Operators.closedBracket) {
-            evaluateBracket(operator);
+            evaluateBracket();
             // pop openBracket
             operatorStack.pop();
         } else {                               // current operator has bigger priority than the op on top of the stack
@@ -52,8 +52,6 @@ public class TermEvaluator {
             Operators topOnStack = operatorStack.pop();
             if (topOnStack == Operators.openBracket)
                 throw new InvalidParameterException("Invalid expression error");
-            else if (topOnStack == Operators.closedBracket)
-                evaluateBracket(topOnStack);
             else
                 evaluate(topOnStack);
         }
@@ -80,7 +78,7 @@ public class TermEvaluator {
      *
      * @param currentOperator the operator to be evaluated.
      */
-    public void evaluate(Operators currentOperator) {
+    private void evaluate(Operators currentOperator) {
         Matrix matrixResult = matrixOperation(currentOperator);
         operandStack.push(matrixResult);
     }
@@ -88,12 +86,10 @@ public class TermEvaluator {
     /**
      * Evaluates the given operator and performs the corresponding matrix operation on the operands until openBracket.
      * The result matrix is pushed onto the operand stack.
-     *
-     * @param currentOperator the operator to be evaluated.
      */
 
-    public void evaluateBracket(Operators currentOperator) {
-        while (!previousOperatorOpenBracket() && currentOperator.ordinal() >= operatorStack.peek().ordinal()) {
+    private void evaluateBracket() {
+        while (!previousOperatorOpenBracket()) {
             Operators matrixOperation = operatorStack.pop();
             Matrix matrixResult = matrixOperation(matrixOperation);
             operandStack.push(matrixResult);
@@ -140,7 +136,7 @@ public class TermEvaluator {
             case openBracket:
                 return new Matrix(operandStack.pop());
             default:
-                throw new UnsupportedOperationException("Invalid operator:" + matrixOperation);
+                throw new UnsupportedOperationException("Invalid operator: " + matrixOperation);
         }
     }
 }

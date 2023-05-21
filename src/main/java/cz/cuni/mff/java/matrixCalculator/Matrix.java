@@ -437,6 +437,21 @@ public class Matrix {
         return resultMatrices[0];
     }
 
+    public String stringRepresentationWithBrackets() {
+        StringBuilder stringRepresentation = new StringBuilder();
+        stringRepresentation.append('[');
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                stringRepresentation.append(" ");
+                stringRepresentation.append(matrix[i][j]);
+            }
+            if (matrix.length > 1 && i != matrix.length-1)
+                stringRepresentation.append(" ;");
+        }
+        stringRepresentation.append(" ]");
+        return stringRepresentation.toString();
+    }
+
     /**
      * Returns a string representation of the matrix, where each element is separated by a space
      * and each row is separated by a newline character.
